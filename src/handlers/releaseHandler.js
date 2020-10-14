@@ -1,7 +1,7 @@
 const github = require('@actions/github')
 module.exports = () => {
 
-    const context = github.context
-    console.log(JSON.stringify(context))
+    const { payload: { action }, eventName } = github.context
+    console.log(`${eventName} :: ${action}`)
     return Promise.resolve()
 }

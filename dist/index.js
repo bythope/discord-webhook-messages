@@ -5842,8 +5842,8 @@ module.exports = HandlerExecutor
 const github = __webpack_require__(438)
 module.exports = () => {
 
-    const context = github.context
-    console.log(JSON.stringify(context))
+    const { payload: { action }, eventName } = github.context
+    console.log(`${eventName} :: ${action}`)
     return Promise.resolve()
 }
 
