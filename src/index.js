@@ -1,10 +1,10 @@
 const core = require('@actions/core')
-const testHandler = require('./handlers/testHandler')
 const { isWebhookUrl } = require('./helpers/validationHelper')
 const HandlerExecutor = require('./HandlerExecutor')
+const releaseHandler = require('./handlers/releaseHandler')
 
 const handlerExecutor = new HandlerExecutor()
-handlerExecutor.add('test', testHandler)
+handlerExecutor.add('release', releaseHandler)
 
 const input = {
     webhookUrl: core.getInput('webhookUrl'),

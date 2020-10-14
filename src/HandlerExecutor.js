@@ -28,7 +28,7 @@ class HandlerExecutor {
         }
 
         promise.then(result => {
-            core.setOutput('data', JSON.stringify(result))
+            core.setOutput('data', result)
         }).catch(error => {
             core.setFailed(`Handler ${key} failed. Reason: ${error.message}`)
             console.error(error)

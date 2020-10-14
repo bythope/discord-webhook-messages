@@ -3,8 +3,16 @@ name: Discord Webhook
 
 on:
   push:
-    branches: [ 'master' ]
+    branches:
+      - '*'
     tags:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  page_build:
+  release:
+    types:
       - '*'
 
 jobs:
@@ -18,4 +26,4 @@ jobs:
         uses: bythope/discord-webhook@master
         with:
           webhookUrl: 'https://discordapp.com/api/webhooks/765922924540198933/nDp4Tu_uJotrm739NrMXupOgpNq1oma8URT8ZbkZMbLNFin5nIPWyhcBxIIwXc9nb6_C'
-          handler: 'test'
+          handler: 'release'
