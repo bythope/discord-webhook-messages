@@ -36447,7 +36447,7 @@ function createEmbed({ action, name, body, tag, url, draft, prerelease, publishe
     embed.setColor(prerelease ? 0xf66a0a : 0x28a745)
     embed.setTitle(`${prerelease ? 'Pre-release' : 'Release'}: ${tag} ${name} ${draft ? '(Draft)': ''}`)
     embed.setURL(url)
-    embed.setDescription(`${trimBody(body)}\n[Read more](${url})`)
+    embed.setDescription(`${trimBody(body)}`)
     embed.setFooter(`Branch: ${branch}`)
     embed.setTimestamp(new Date(published))
     return embed
