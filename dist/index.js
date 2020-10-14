@@ -36401,7 +36401,6 @@ class HandlerExecutor {
         }).catch(error => {
             core.setFailed(`Handler ${key} failed. Reason: ${error.message}`)
             console.error(error)
-            process.exit()
         })
     }
 
@@ -36436,6 +36435,9 @@ module.exports = ({ webhookUrl }) => {
     return client.send(embed).then(result => {
         client.destroy()
         return data
+    }).catch(error => {
+        client.destroy()
+        throw error
     })
 }
 
