@@ -8,7 +8,7 @@ The goal of this action is to produce helpful messages on your Discord server ba
 
 - [x] Release
 - [ ] Pull Request
-- [ ] Push (branches / tags)
+- [x] Push (branches / tags)
 - [ ] Page build
 
 ## Getting Started:
@@ -21,8 +21,10 @@ The webhook URL to use. This should be in a repository secret and the secret sho
 #### `handler`
 Handler defines background logic of the action. Currently avaiable handlers:
  - `release`: Publishes message to your discord server when release is created.
+ - `push`: Publishes message to your discord server when push action occurs.
 ---
 ### Example
+#### Release Handler
 ```yaml
 name: Discord Webhook Messages
 on:
@@ -38,6 +40,24 @@ jobs:
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           handler: 'release'
+```
+#### Push Handler
+```yaml
+name: Discord Webhook Messages
+on:
+  push:
+    branches: 
+      - '*'
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Discord Webhook
+        uses: bythope/discord-webhook-messages@v1.0.0
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          handler: 'push'
 ```
 
 ## Contributing
