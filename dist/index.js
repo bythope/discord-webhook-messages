@@ -36426,17 +36426,16 @@ module.exports = ({ webhookUrl }) => {
     //     return Promise.resolve()
     // }
 
-    // const { id, token } = extractDataFromWebhookUrl(webhookUrl)
-    // const client = new WebhookClient(id, token)
+    const { id, token } = extractDataFromWebhookUrl(webhookUrl)
+    const client = new WebhookClient(id, token)
     
-    // let embed = createEmbed(data)
-    // return client.send(embed).then(result => {
-    //     client.destroy()
-    //     return data
-    // }).catch(error => {
-    //     client.destroy()
-    //     throw error
-    // })
+    return client.send('Hello').then(result => {
+        client.destroy()
+        return ''
+    }).catch(error => {
+        client.destroy()
+        throw error
+    })
     console.log(JSON.stringify(payload), eventName)
     return Promise.resolve()
 }
