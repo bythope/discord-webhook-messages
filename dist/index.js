@@ -36459,7 +36459,7 @@ function createDescription(commits, language) {
     let description = 'Writen in: ' + language + '\n'
     + 'Following commits were added: \n'
     for(let commit of commits){
-        description += `\`${commit.id.substring(0, 6)}\` - ` + commit.message + '\n'
+        description += `\`${commit.id.substring(0, 6)}\` - ` + `**${commit.message}**` + '\n'
     }
     return description
 }
