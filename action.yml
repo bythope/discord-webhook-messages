@@ -1,4 +1,4 @@
-name: Discord Webhook
+name: Discord Webhook Messages
 author: Daniel Kalevski
 description: GitHub action for posting messages on discord server.
 branding:
