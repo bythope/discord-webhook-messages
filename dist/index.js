@@ -419,6 +419,7 @@ class HandlerExecutor {
     execute(key) {
         if (typeof this.handlers[key] !== 'function') {
             core.setFailed(`Handler of type ${key} is not supported, available handlers: ${Object.keys(this.handlers).join(', ')}`)
+            return
         }
         const promise = this.handlers[key]()
         if (typeof promise.then !== 'function') {
