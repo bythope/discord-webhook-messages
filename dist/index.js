@@ -36432,7 +36432,10 @@ module.exports = ({ webhookUrl }) => {
     const { id, token } = extractDataFromWebhookUrl(webhookUrl)
     const client = new WebhookClient(id, token)
         
-    return client.send(JSON.stringify(object))
+    return client.send(JSON.stringify(object)).then(result => {
+        client.destroy()
+        return result
+    })
 }
 
 /***/ }),
