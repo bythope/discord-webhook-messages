@@ -14,10 +14,6 @@ module.exports = ({ webhookUrl }) => {
         action, name, body, tag: tag_name, url: html_url, draft, prerelease, branch: target_commitish
     }
 
-    const input = {
-        webhookUrl: core.getInput('webhookUrl'),
-        handler: core.getInput('handler')
-    }
     const { id, token } = extractDataFromWebhookUrl(webhookUrl)
     const client = new WebhookClient(id, token)
         
