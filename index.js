@@ -18,4 +18,5 @@ axios.post(input.webhookUrl, { content: '', embeds: [ {
     description: JSON.stringify(payload)
 }] }).catch(error => {
     console.error(error)
+    core.setFailed(error.message)
 })
