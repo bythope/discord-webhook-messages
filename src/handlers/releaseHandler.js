@@ -18,20 +18,31 @@ module.exports = ({ webhookUrl }) => {
     const { id, token } = extractDataFromWebhookUrl(webhookUrl)
     const client = new WebhookClient(id, token)
     
-    let embed = createEmbed(data)
-
+    const options = {
+        description: core.getInput('description')
+    }
+    
+    let embed = createEmbed(data, options)
     return client.send(embed).then(result => {
         client.destroy()
         return data
     })
 }
 
-function createEmbed({ action, name, body, tag, url, draft, prerelease, branch }) {
-    let embed = new MessageEmbed()
+
+function createEmbed({ action, name, body, tag, url, draft, prerelease, branch }, { description }) {
+    let embed = new MessageEmbed({ type: 'rich' })
     embed.setColor(prerelease ? 0xf66a0a : 0x28a745)
-    embed.setDescription(`${draft ? 'Draft release\n': ''}Branch: ${branch}\n${body}`)
-    embed.setTitle(`${prerelease ? 'Pre-release:' : 'Release'}: ${tag} ${name} ${action}`)
+    embed.setTitle(`${prerelease ? 'Pre-release' : 'Release'}: ${tag} ${name} ${draft ? '(Draft)': ''}`)
     embed.setURL(url)
-    embed.setFooter(`Tag: ${tag}`)
+    embed.setDescription(description || `I'm happy to announce my new version. **Check the updates**`)
+    embed.setFooter(tag)
     return embed
+}
+
+function trimBody(body) {
+    if (body.length < 2000) {
+        return body
+    }
+    
 }
