@@ -36410,6 +36410,61 @@ module.exports = HandlerExecutor
 
 /***/ }),
 
+/***/ 5172:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const core = __webpack_require__(2186)
+const github = __webpack_require__(5438)
+const { WebhookClient, MessageEmbed } = __webpack_require__(5973)
+const { extractDataFromWebhookUrl } = __webpack_require__(8505)
+
+module.exports = ({ webhookUrl }) => {
+    const { payload, eventName } = github.context
+
+    if (eventName !== 'push') {
+        console.warn('push handler can be executed only on "push" action triggers')
+        return Promise.resolve()
+    }
+
+    const {commits, repository: {language}, sender: {login}} = payload
+    const data = {commits, language, login}
+
+    const { id, token } = extractDataFromWebhookUrl(webhookUrl)
+    const client = new WebhookClient(id, token)
+    
+    return client.send(createEmbed(data)).then(result => {
+        client.destroy()
+        return ''
+    }).catch(error => {
+        client.destroy()
+        throw error
+    })
+}
+
+
+function createEmbed({ commits, language, login}) {
+    let embed = new MessageEmbed({ type: 'rich' })
+    let description =  createDescription(commits, language)
+    embed.setColor(0x32ecab)
+    embed.setTitle(login + ' pushed some changes')
+    embed.setDescription(description)
+    embed.setFooter(`Number of commits: ${commits.length}`)
+    embed.setTimestamp(new Date(commits[commits.length-1].timestamp))
+    return embed
+}
+
+
+function createDescription(commits, language) {
+    let description = 'Writen in: ' + language + '\n'
+    + 'Following commits were added: \n'
+    for(let commit of commits){
+        description += `\`${commit.id.substring(0, 6)}\` - ` + `**${commit.message}**` + '\n'
+    }
+    return description
+}
+
+/***/ }),
+
 /***/ 285:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -36495,6 +36550,7 @@ const core = __webpack_require__(2186)
 const { isWebhookUrl } = __webpack_require__(8505)
 const HandlerExecutor = __webpack_require__(5523)
 const releaseHandler = __webpack_require__(285)
+const pushHandler = __webpack_require__(5172)
 
 
 
@@ -36505,6 +36561,7 @@ const input = {
 
 const handlerExecutor = new HandlerExecutor(input)
 handlerExecutor.add('release', releaseHandler)
+handlerExecutor.add('push', pushHandler)
 
 if (!isWebhookUrl(input.webhookUrl)) {
     core.setFailed('The given webhook url is not valid. Please ensure you give a full discord webhook url')
@@ -36566,7 +36623,7 @@ module.exports = eval("require")("zlib-sync");
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"_from\":\"discord.js\",\"_id\":\"discord.js@12.3.1\",\"_inBundle\":false,\"_integrity\":\"sha512-mSFyV/mbvzH12UXdS4zadmeUf8IMQOo/YdunubG1wWt1xjWvtaJz/s9CGsFD2B5pTw1W/LXxxUbrQjIZ/xlUdw==\",\"_location\":\"/discord.js\",\"_phantomChildren\":{},\"_requested\":{\"type\":\"tag\",\"registry\":true,\"raw\":\"discord.js\",\"name\":\"discord.js\",\"escapedName\":\"discord.js\",\"rawSpec\":\"\",\"saveSpec\":null,\"fetchSpec\":\"latest\"},\"_requiredBy\":[\"#USER\",\"/\"],\"_resolved\":\"https://registry.npmjs.org/discord.js/-/discord.js-12.3.1.tgz\",\"_shasum\":\"8f58ac17d29b068dbfeb6c01fc7777bacd5324cf\",\"_spec\":\"discord.js\",\"_where\":\"/home/kalevski/projects/bythope/discord-webhook\",\"author\":{\"name\":\"Amish Shah\",\"email\":\"amishshah.2k@gmail.com\"},\"browser\":{\"@discordjs/opus\":false,\"https\":false,\"ws\":false,\"erlpack\":false,\"prism-media\":false,\"opusscript\":false,\"node-opus\":false,\"tweetnacl\":false,\"sodium\":false,\"worker_threads\":false,\"zlib-sync\":false,\"src/sharding/Shard.js\":false,\"src/sharding/ShardClientUtil.js\":false,\"src/sharding/ShardingManager.js\":false,\"src/client/voice/ClientVoiceManager.js\":false,\"src/client/voice/VoiceBroadcast.js\":false,\"src/client/voice/VoiceConnection.js\":false,\"src/client/voice/dispatcher/BroadcastDispatcher.js\":false,\"src/client/voice/dispatcher/StreamDispatcher.js\":false,\"src/client/voice/networking/VoiceUDPClient.js\":false,\"src/client/voice/networking/VoiceWebSocket.js\":false,\"src/client/voice/player/AudioPlayer.js\":false,\"src/client/voice/player/BasePlayer.js\":false,\"src/client/voice/player/BroadcastAudioPlayer.js\":false,\"src/client/voice/receiver/PacketHandler.js\":false,\"src/client/voice/receiver/Receiver.js\":false,\"src/client/voice/util/PlayInterface.js\":false,\"src/client/voice/util/Secretbox.js\":false,\"src/client/voice/util/Silence.js\":false,\"src/client/voice/util/VolumeInterface.js\":false},\"bugs\":{\"url\":\"https://github.com/discordjs/discord.js/issues\"},\"bundleDependencies\":false,\"commitlint\":{\"extends\":[\"@commitlint/config-angular\"],\"rules\":{\"scope-case\":[2,\"always\",\"pascal-case\"],\"type-enum\":[2,\"always\",[\"chore\",\"build\",\"ci\",\"docs\",\"feat\",\"fix\",\"perf\",\"refactor\",\"revert\",\"style\",\"test\"]]}},\"dependencies\":{\"@discordjs/collection\":\"^0.1.6\",\"@discordjs/form-data\":\"^3.0.1\",\"abort-controller\":\"^3.0.0\",\"node-fetch\":\"^2.6.0\",\"prism-media\":\"^1.2.2\",\"setimmediate\":\"^1.0.5\",\"tweetnacl\":\"^1.0.3\",\"ws\":\"^7.3.1\"},\"deprecated\":false,\"description\":\"A powerful library for interacting with the Discord API\",\"devDependencies\":{\"@commitlint/cli\":\"^9.1.2\",\"@commitlint/config-angular\":\"^9.1.1\",\"@types/node\":\"^12.12.6\",\"@types/ws\":\"^7.2.6\",\"cross-env\":\"^7.0.2\",\"discord.js-docgen\":\"github:discordjs/docgen\",\"dtslint\":\"^3.6.14\",\"eslint\":\"^7.6.0\",\"eslint-config-prettier\":\"^6.11.0\",\"eslint-plugin-import\":\"^2.22.0\",\"eslint-plugin-prettier\":\"^3.1.4\",\"husky\":\"^4.2.5\",\"jest\":\"^26.4.0\",\"json-filter-loader\":\"^1.0.0\",\"lint-staged\":\"^10.2.11\",\"prettier\":\"^2.0.5\",\"terser-webpack-plugin\":\"^4.1.0\",\"tslint\":\"^6.1.3\",\"typescript\":\"^3.9.7\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"engines\":{\"node\":\">=12.0.0\"},\"exports\":{\".\":[{\"require\":\"./src/index.js\",\"import\":\"./esm/discord.mjs\"},\"./src/index.js\"],\"./esm\":\"./esm/discord.mjs\"},\"homepage\":\"https://github.com/discordjs/discord.js#readme\",\"husky\":{\"hooks\":{\"pre-commit\":\"lint-staged\",\"commit-msg\":\"commitlint -E HUSKY_GIT_PARAMS\"}},\"keywords\":[\"discord\",\"api\",\"bot\",\"client\",\"node\",\"discordapp\"],\"license\":\"Apache-2.0\",\"lint-staged\":{\"*.js\":\"eslint --fix\",\"*.ts\":\"prettier --write --single-quote --print-width 120 --trailing-comma all --end-of-line lf --arrow-parens avoid\"},\"main\":\"./src/index\",\"name\":\"discord.js\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/discordjs/discord.js.git\"},\"runkitExampleFilename\":\"./docs/examples/ping.js\",\"scripts\":{\"build:browser\":\"webpack\",\"docs\":\"docgen --source src --custom docs/index.yml --output docs/docs.json\",\"docs:test\":\"docgen --source src --custom docs/index.yml\",\"lint\":\"eslint src\",\"lint:fix\":\"eslint src --fix\",\"lint:typings\":\"tslint typings/index.d.ts\",\"prepublishOnly\":\"npm run test && cross-env NODE_ENV=production npm run build:browser\",\"prettier\":\"prettier --write --single-quote --print-width 120 --trailing-comma all --end-of-line lf --arrow-parens avoid src/**/*.js typings/**/*.ts\",\"test\":\"npm run lint && npm run docs:test && npm run lint:typings\",\"test:typescript\":\"tsc\"},\"types\":\"./typings/index.d.ts\",\"unpkg\":\"./webpack/discord.min.js\",\"version\":\"12.3.1\"}");
+module.exports = JSON.parse("{\"_args\":[[\"discord.js@12.3.1\",\"D:\\\\filip\\\\programiranje\\\\Repo\\\\discord-webhook-messages\"]],\"_from\":\"discord.js@12.3.1\",\"_id\":\"discord.js@12.3.1\",\"_inBundle\":false,\"_integrity\":\"sha512-mSFyV/mbvzH12UXdS4zadmeUf8IMQOo/YdunubG1wWt1xjWvtaJz/s9CGsFD2B5pTw1W/LXxxUbrQjIZ/xlUdw==\",\"_location\":\"/discord.js\",\"_phantomChildren\":{},\"_requested\":{\"type\":\"version\",\"registry\":true,\"raw\":\"discord.js@12.3.1\",\"name\":\"discord.js\",\"escapedName\":\"discord.js\",\"rawSpec\":\"12.3.1\",\"saveSpec\":null,\"fetchSpec\":\"12.3.1\"},\"_requiredBy\":[\"/\"],\"_resolved\":\"https://registry.npmjs.org/discord.js/-/discord.js-12.3.1.tgz\",\"_spec\":\"12.3.1\",\"_where\":\"D:\\\\filip\\\\programiranje\\\\Repo\\\\discord-webhook-messages\",\"author\":{\"name\":\"Amish Shah\",\"email\":\"amishshah.2k@gmail.com\"},\"browser\":{\"@discordjs/opus\":false,\"https\":false,\"ws\":false,\"erlpack\":false,\"prism-media\":false,\"opusscript\":false,\"node-opus\":false,\"tweetnacl\":false,\"sodium\":false,\"worker_threads\":false,\"zlib-sync\":false,\"src/sharding/Shard.js\":false,\"src/sharding/ShardClientUtil.js\":false,\"src/sharding/ShardingManager.js\":false,\"src/client/voice/ClientVoiceManager.js\":false,\"src/client/voice/VoiceBroadcast.js\":false,\"src/client/voice/VoiceConnection.js\":false,\"src/client/voice/dispatcher/BroadcastDispatcher.js\":false,\"src/client/voice/dispatcher/StreamDispatcher.js\":false,\"src/client/voice/networking/VoiceUDPClient.js\":false,\"src/client/voice/networking/VoiceWebSocket.js\":false,\"src/client/voice/player/AudioPlayer.js\":false,\"src/client/voice/player/BasePlayer.js\":false,\"src/client/voice/player/BroadcastAudioPlayer.js\":false,\"src/client/voice/receiver/PacketHandler.js\":false,\"src/client/voice/receiver/Receiver.js\":false,\"src/client/voice/util/PlayInterface.js\":false,\"src/client/voice/util/Secretbox.js\":false,\"src/client/voice/util/Silence.js\":false,\"src/client/voice/util/VolumeInterface.js\":false},\"bugs\":{\"url\":\"https://github.com/discordjs/discord.js/issues\"},\"commitlint\":{\"extends\":[\"@commitlint/config-angular\"],\"rules\":{\"scope-case\":[2,\"always\",\"pascal-case\"],\"type-enum\":[2,\"always\",[\"chore\",\"build\",\"ci\",\"docs\",\"feat\",\"fix\",\"perf\",\"refactor\",\"revert\",\"style\",\"test\"]]}},\"dependencies\":{\"@discordjs/collection\":\"^0.1.6\",\"@discordjs/form-data\":\"^3.0.1\",\"abort-controller\":\"^3.0.0\",\"node-fetch\":\"^2.6.0\",\"prism-media\":\"^1.2.2\",\"setimmediate\":\"^1.0.5\",\"tweetnacl\":\"^1.0.3\",\"ws\":\"^7.3.1\"},\"description\":\"A powerful library for interacting with the Discord API\",\"devDependencies\":{\"@commitlint/cli\":\"^9.1.2\",\"@commitlint/config-angular\":\"^9.1.1\",\"@types/node\":\"^12.12.6\",\"@types/ws\":\"^7.2.6\",\"cross-env\":\"^7.0.2\",\"discord.js-docgen\":\"github:discordjs/docgen\",\"dtslint\":\"^3.6.14\",\"eslint\":\"^7.6.0\",\"eslint-config-prettier\":\"^6.11.0\",\"eslint-plugin-import\":\"^2.22.0\",\"eslint-plugin-prettier\":\"^3.1.4\",\"husky\":\"^4.2.5\",\"jest\":\"^26.4.0\",\"json-filter-loader\":\"^1.0.0\",\"lint-staged\":\"^10.2.11\",\"prettier\":\"^2.0.5\",\"terser-webpack-plugin\":\"^4.1.0\",\"tslint\":\"^6.1.3\",\"typescript\":\"^3.9.7\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"engines\":{\"node\":\">=12.0.0\"},\"exports\":{\".\":[{\"require\":\"./src/index.js\",\"import\":\"./esm/discord.mjs\"},\"./src/index.js\"],\"./esm\":\"./esm/discord.mjs\"},\"homepage\":\"https://github.com/discordjs/discord.js#readme\",\"husky\":{\"hooks\":{\"pre-commit\":\"lint-staged\",\"commit-msg\":\"commitlint -E HUSKY_GIT_PARAMS\"}},\"keywords\":[\"discord\",\"api\",\"bot\",\"client\",\"node\",\"discordapp\"],\"license\":\"Apache-2.0\",\"lint-staged\":{\"*.js\":\"eslint --fix\",\"*.ts\":\"prettier --write --single-quote --print-width 120 --trailing-comma all --end-of-line lf --arrow-parens avoid\"},\"main\":\"./src/index\",\"name\":\"discord.js\",\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/discordjs/discord.js.git\"},\"runkitExampleFilename\":\"./docs/examples/ping.js\",\"scripts\":{\"build:browser\":\"webpack\",\"docs\":\"docgen --source src --custom docs/index.yml --output docs/docs.json\",\"docs:test\":\"docgen --source src --custom docs/index.yml\",\"lint\":\"eslint src\",\"lint:fix\":\"eslint src --fix\",\"lint:typings\":\"tslint typings/index.d.ts\",\"prepublishOnly\":\"npm run test && cross-env NODE_ENV=production npm run build:browser\",\"prettier\":\"prettier --write --single-quote --print-width 120 --trailing-comma all --end-of-line lf --arrow-parens avoid src/**/*.js typings/**/*.ts\",\"test\":\"npm run lint && npm run docs:test && npm run lint:typings\",\"test:typescript\":\"tsc\"},\"types\":\"./typings/index.d.ts\",\"unpkg\":\"./webpack/discord.min.js\",\"version\":\"12.3.1\"}");
 
 /***/ }),
 
