@@ -23,7 +23,10 @@ if (!isWebhookUrl(input.webhookUrl)) {
 axios.post(input.webhookUrl, { content: '', embeds: [ {
     title: 'raw payload',
     description: JSON.stringify(payload)
-}] })
+}] }).catch(error => {
+    console.error(error)
+    core.setFailed(error.message)
+})
 
 /***/ }),
 
