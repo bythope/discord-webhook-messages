@@ -1,0 +1,20 @@
+name: Discord Webhook
+author: Daniel Kalevski
+description: GitHub action for posting messages on discord server.
+branding:
+    color: black
+    icon: message-circle
+inputs:
+    webhook:
+        description: A full discord webhook url
+        required: true
+    message-title:
+        description: Message title
+
+
+output:
+    result:
+        description: Webhook result
+runs:
+    using: node12
+    main: index.js
