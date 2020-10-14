@@ -6,10 +6,10 @@ const { extractDataFromWebhookUrl } = require('../helpers')
 module.exports = ({ webhookUrl }) => {
     const { payload, eventName } = github.context
 
-    // if (eventName !== 'push') {
-    //     console.warn('push handler can be executed only on "push" action triggers')
-    //     return Promise.resolve()
-    // }
+    if (eventName !== 'push') {
+        console.warn('push handler can be executed only on "push" action triggers')
+        return Promise.resolve()
+    }
 
     const {commits, repository: {default_branch, language}, sender: {login, repos_url}} = payload
     const data = {commits, default_branch, language, login, repos_url}
@@ -24,18 +24,12 @@ module.exports = ({ webhookUrl }) => {
         client.destroy()
         throw error
     })
-    console.log(JSON.stringify(payload), eventName)
-    return Promise.resolve()
 }
 
 
 function createEmbed({ commits, default_branch, language, login, repos_url}) {
     let embed = new MessageEmbed({ type: 'rich' })
-    let description = 'Writen in: ' + language + '\n'
-        + 'Following commits were added: \n'
-    for(let commit of commits){
-        description += `\`${commit.id.substring(0, 6)}\` - ` + commit.message + '\n'
-    }
+    let description = createDescription(commits, language, id, message)
     embed.setColor(0x32ecab)
     embed.setTitle(login + ' pushed some changes')
     embed.setURL(repos_url)
@@ -45,7 +39,11 @@ function createEmbed({ commits, default_branch, language, login, repos_url}) {
     return embed
 }
 
-function trimBody(body = '') {
-    if (body.length < 2000) return body
-    return `${body.substring(0, 2000)}...`
+function createDescription(commits, language, id, message) {
+    let description = 'Writen in: ' + language + '\n'
+    + 'Following commits were added: \n'
+    for(let commit of commits){
+        description += `\`${commit.id.substring(0, 6)}\` - ` + commit.message + '\n'
+    }
+    return description
 }
