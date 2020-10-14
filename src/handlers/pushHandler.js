@@ -36,7 +36,7 @@ function createEmbed({ commits, default_branch, language, login, repos_url}) {
     for(let commit of commits){
         description += commit.message + '\n'
     }
-    embed.setColor(login ? 0xf66a0a : 0x28a745)
+    embed.setColor(0x32ecab)
     embed.setTitle(login + ' pushed some changes')
     embed.setURL(repos_url)
     embed.setDescription(description)
