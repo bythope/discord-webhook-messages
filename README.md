@@ -1,4 +1,3 @@
-# Discord Webhook Messages
 ![GitHub](https://img.shields.io/github/license/bythope/discord-webhook-messages?style=for-the-badge)
 ![](https://img.shields.io/badge/-Github_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 ![GitHub tag](https://img.shields.io/github/v/tag/bythope/discord-webhook-messages?include_prereleases&style=for-the-badge)
