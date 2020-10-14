@@ -3,8 +3,7 @@ name: Discord Webhook
 
 on:
   push:
-    tags:
-      - '*'
+    branches: [ 'master' ]
 
 jobs:
   build:
