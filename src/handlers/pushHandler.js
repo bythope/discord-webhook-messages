@@ -11,8 +11,8 @@ module.exports = ({ webhookUrl }) => {
         return Promise.resolve()
     }
 
-    const {commits, repository: {default_branch, language}, sender: {login, repos_url}} = payload
-    const data = {commits, default_branch, language, login, repos_url}
+    const {commits, repository: {language}, sender: {login, repos_url}} = payload
+    const data = {commits, language, login, repos_url}
 
     const { id, token } = extractDataFromWebhookUrl(webhookUrl)
     const client = new WebhookClient(id, token)
@@ -27,14 +27,14 @@ module.exports = ({ webhookUrl }) => {
 }
 
 
-function createEmbed({ commits, default_branch, language, login, repos_url}) {
+function createEmbed({ commits, language, login, repos_url}) {
     let embed = new MessageEmbed({ type: 'rich' })
     let description =  createDescription(commits, language)
     embed.setColor(0x32ecab)
     embed.setTitle(login + ' pushed some changes')
     embed.setURL(repos_url)
     embed.setDescription(description)
-    embed.setFooter(`Default branch: ${default_branch}`)
+    embed.setFooter(`Number of commits: ${commits.length}`)
     embed.setTimestamp(new Date(commits[commits.length-1].timestamp))
     return embed
 }
