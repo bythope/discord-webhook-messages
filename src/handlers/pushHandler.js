@@ -12,11 +12,12 @@ module.exports = ({ webhookUrl }) => {
     // }
 
     const {commits, repository: {default_branch, language}, sender: {login, repos_url}} = payload
+    const data = {commits, default_branch, language, login, repos_url}
 
     const { id, token } = extractDataFromWebhookUrl(webhookUrl)
     const client = new WebhookClient(id, token)
     
-    return client.send(JSON.stringify({commits, default_branch, language, login, repos_url})).then(result => {
+    return client.send(createEmbed(data)).then(result => {
         client.destroy()
         return ''
     }).catch(error => {
@@ -28,14 +29,19 @@ module.exports = ({ webhookUrl }) => {
 }
 
 
-function createEmbed({ action, name, body, tag, url, draft, prerelease, published, branch }) {
+function createEmbed({ commits, default_branch, language, login, repos_url}) {
     let embed = new MessageEmbed({ type: 'rich' })
-    embed.setColor(prerelease ? 0xf66a0a : 0x28a745)
-    embed.setTitle(`${prerelease ? 'Pre-release' : 'Release'}: ${tag} ${name} ${draft ? '(Draft)': ''}`)
-    embed.setURL(url)
-    embed.setDescription(`${trimBody(body)}`)
-    embed.setFooter(`Branch: ${branch}`)
-    embed.setTimestamp(new Date(published))
+    let description = 'Writen in: ' + language + '\n'
+        + 'Following commits were added: \n'
+    for(let commit of commits){
+        description += commit.message + '\n'
+    }
+    embed.setColor(login ? 0xf66a0a : 0x28a745)
+    embed.setTitle(login + ' created pull request')
+    embed.setURL(repos_url)
+    embed.setDescription('Writen in: ' + language)
+    embed.setFooter(`Default branch: ${default_branch}`)
+    embed.setTimestamp(new Date(commits[commits.length-1].timestamp))
     return embed
 }
 
