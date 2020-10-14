@@ -39,10 +39,3 @@ function createEmbed({ action, name, body, tag, url, draft, prerelease, branch }
     embed.setFooter(tag)
     return embed
 }
-
-function trimBody(body) {
-    if (body.length < 2000) {
-        return body
-    }
-    
-}
