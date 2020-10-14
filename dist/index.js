@@ -36413,8 +36413,9 @@ module.exports = HandlerExecutor
 /***/ 285:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+const core = __webpack_require__(2186)
 const github = __webpack_require__(5438)
-const { WebhookClient } = __webpack_require__(5973)
+const { WebhookClient, MessageEmbed } = __webpack_require__(5973)
 const { extractDataFromWebhookUrl } = __webpack_require__(8505)
 
 module.exports = ({ webhookUrl }) => {
@@ -36425,17 +36426,29 @@ module.exports = ({ webhookUrl }) => {
         return Promise.resolve()
     }
     const { action, release: { body, draft, html_url, name, prerelease, published_at, tag_name, target_commitish, } } = payload
-    const object = {
+    const data = {
         action, name, body, tag: tag_name, url: html_url, draft, prerelease, branch: target_commitish
     }
 
     const { id, token } = extractDataFromWebhookUrl(webhookUrl)
     const client = new WebhookClient(id, token)
-        
-    return client.send(JSON.stringify(object)).then(result => {
+    
+    let embed = createEmbed(data)
+
+    return client.send(embed).then(result => {
         client.destroy()
-        return result
+        return data
     })
+}
+
+function createEmbed({ action, name, body, tag, url, draft, prerelease, branch }) {
+    let embed = new MessageEmbed()
+    embed.setColor(prerelease ? 0xf66a0a : 0x28a745)
+    embed.setDescription(`${draft ? 'Draft release\n': ''}Branch: ${branch}\n${body}`)
+    embed.setTitle(`${prerelease ? 'Pre-release:' : 'Release'}: ${tag} ${name} ${action}`)
+    embed.setURL(url)
+    embed.setFooter(`Tag: ${tag}`)
+    return embed
 }
 
 /***/ }),
@@ -36458,8 +36471,13 @@ const extractDataFromWebhookUrl = (url = "") => {
     }
 }
 
+const interpolate = (string, object) => {
+    return string
+}
+
 exports.isWebhookUrl = isWebhookUrl
 exports.extractDataFromWebhookUrl = extractDataFromWebhookUrl
+exports.interpolate = interpolate
 
 /***/ }),
 

@@ -12,7 +12,6 @@ inputs:
         description: Event handler
         required: true
 
-
 output:
     result:
         description: Webhook result

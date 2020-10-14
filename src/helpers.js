@@ -13,5 +13,10 @@ const extractDataFromWebhookUrl = (url = "") => {
     }
 }
 
+const interpolate = (string, object) => {
+    return string
+}
+
 exports.isWebhookUrl = isWebhookUrl
 exports.extractDataFromWebhookUrl = extractDataFromWebhookUrl
+exports.interpolate = interpolate
