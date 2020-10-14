@@ -8,9 +8,9 @@ The goal of this action is to produce helpful messages on your Discord server ba
 ### Supported events:
 
 - [x] Release
-- [] Pull Request
-- [] Push (branches / tags)
-- [] Page build
+- [ ] Pull Request
+- [ ] Push (branches / tags)
+- [ ] Page build
 
 ## Getting Started:
 
