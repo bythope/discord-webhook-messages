@@ -12,11 +12,4 @@ if (!isWebhookUrl(input.webhookUrl)) {
     core.setFailed('The given webhook url is not valid. Please ensure you give a full discord webhook url')
 }
 
-
-axios.post(input.webhookUrl, { content: '', embeds: [ {
-    title: 'raw payload',
-    description: JSON.stringify(payload)
-}] }).catch(error => {
-    console.error(error)
-    core.setFailed(error.message)
-})
+console.log(JSON.stringify(payload))
