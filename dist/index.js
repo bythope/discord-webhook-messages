@@ -36426,10 +36426,12 @@ module.exports = ({ webhookUrl }) => {
     //     return Promise.resolve()
     // }
 
+    const {commits, repository: {default_branch, language}, sender: {login, repos_url}} = payload
+
     const { id, token } = extractDataFromWebhookUrl(webhookUrl)
     const client = new WebhookClient(id, token)
     
-    return client.send('Hello').then(result => {
+    return client.send(JSON.stringify({commits, default_branch, language, login, repos_url})).then(result => {
         client.destroy()
         return ''
     }).catch(error => {
