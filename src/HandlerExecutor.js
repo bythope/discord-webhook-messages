@@ -2,8 +2,9 @@ const core = require('@actions/core')
 
 class HandlerExecutor {
 
-    constructor() {
+    constructor(input) {
         this.handlers = {}
+        this.input = input
     }
 
     add(key, handler) {
@@ -21,7 +22,7 @@ class HandlerExecutor {
             core.setFailed(`Handler of type ${key} is not supported, available handlers: ${Object.keys(this.handlers).join(', ')}`)
             return
         }
-        const promise = this.handlers[key]()
+        const promise = this.handlers[key](this.input)
         if (typeof promise.then !== 'function') {
             console.error(`Handler ${key} must return promise!`)
             return

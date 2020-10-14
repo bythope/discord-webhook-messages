@@ -23,7 +23,8 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
-    "axios": "^0.20.0"
+    "axios": "^0.20.0",
+    "discord.js": "^12.3.1"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.24.1"
