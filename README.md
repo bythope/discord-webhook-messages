@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run Discord Webhook
-        uses: bythope/discord-webhook-messages@v1.0.0
+        uses: bythope/discord-webhook-messages@v1.1.0
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           handler: 'release'
@@ -54,7 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run Discord Webhook
-        uses: bythope/discord-webhook-messages@v1.0.0
+        uses: bythope/discord-webhook-messages@v1.1.0
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           handler: 'push'
