@@ -29,7 +29,7 @@ module.exports = ({ webhookUrl }) => {
 
 function createEmbed({ commits, default_branch, language, login, repos_url}) {
     let embed = new MessageEmbed({ type: 'rich' })
-    let description = createDescription(commits, language, id, message)
+    let description =  createDescription(commits, language)
     embed.setColor(0x32ecab)
     embed.setTitle(login + ' pushed some changes')
     embed.setURL(repos_url)
@@ -39,7 +39,8 @@ function createEmbed({ commits, default_branch, language, login, repos_url}) {
     return embed
 }
 
-function createDescription(commits, language, id, message) {
+
+function createDescription(commits, language) {
     let description = 'Writen in: ' + language + '\n'
     + 'Following commits were added: \n'
     for(let commit of commits){
