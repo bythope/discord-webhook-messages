@@ -36455,13 +36455,6 @@ function createEmbed({ action, name, body, tag, url, draft, prerelease, branch }
     return embed
 }
 
-function trimBody(body) {
-    if (body.length < 2000) {
-        return body
-    }
-    
-}
-
 /***/ }),
 
 /***/ 8505:
