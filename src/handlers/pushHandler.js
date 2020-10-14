@@ -34,7 +34,7 @@ function createEmbed({ commits, default_branch, language, login, repos_url}) {
     let description = 'Writen in: ' + language + '\n'
         + 'Following commits were added: \n'
     for(let commit of commits){
-        description += commit.message + '\n'
+        description += `\`${commit.id.substring(0, 6)}\` - ` + commit.message + '\n'
     }
     embed.setColor(0x32ecab)
     embed.setTitle(login + ' pushed some changes')
