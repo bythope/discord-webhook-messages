@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run Discord Webhook
-        uses: bythope/discord-webhook-messages@v1.0.0
+        uses: filipkule/discord-webhook-messages@master
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          handler: 'release'
+          handler: 'push'
