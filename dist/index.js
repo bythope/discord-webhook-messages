@@ -36401,6 +36401,7 @@ class HandlerExecutor {
         }).catch(error => {
             core.setFailed(`Handler ${key} failed. Reason: ${error.message}`)
             console.error(error)
+            process.exit()
         })
     }
 
@@ -36426,18 +36427,12 @@ module.exports = ({ webhookUrl }) => {
         return Promise.resolve()
     }
     const { action, release: { body, draft, html_url, name, prerelease, published_at, tag_name, target_commitish, } } = payload
-    const data = {
-        action, name, body, tag: tag_name, url: html_url, draft, prerelease, branch: target_commitish
-    }
+    const data = { action, name, body, tag: tag_name, url: html_url, draft, prerelease, published: published_at, branch: target_commitish }
 
     const { id, token } = extractDataFromWebhookUrl(webhookUrl)
     const client = new WebhookClient(id, token)
     
-    const options = {
-        description: core.getInput('description')
-    }
-    
-    let embed = createEmbed(data, options)
+    let embed = createEmbed(data)
     return client.send(embed).then(result => {
         client.destroy()
         return data
@@ -36445,14 +36440,20 @@ module.exports = ({ webhookUrl }) => {
 }
 
 
-function createEmbed({ action, name, body, tag, url, draft, prerelease, branch }, { description }) {
+function createEmbed({ action, name, body, tag, url, draft, prerelease, published, branch }) {
     let embed = new MessageEmbed({ type: 'rich' })
     embed.setColor(prerelease ? 0xf66a0a : 0x28a745)
     embed.setTitle(`${prerelease ? 'Pre-release' : 'Release'}: ${tag} ${name} ${draft ? '(Draft)': ''}`)
     embed.setURL(url)
-    embed.setDescription(description || `I'm happy to announce my new version. **Check the updates**`)
-    embed.setFooter(tag)
+    embed.setDescription(`${trimBody(body)}\n[Read more](${url})`)
+    embed.setFooter(`Branch: ${branch}`)
+    embed.setTimestamp(new Date(published))
     return embed
+}
+
+function trimBody(body = '') {
+    if (body.length < 2000) return body
+    return `${body.substring(0, 2000)}...`
 }
 
 /***/ }),

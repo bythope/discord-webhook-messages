@@ -33,6 +33,7 @@ class HandlerExecutor {
         }).catch(error => {
             core.setFailed(`Handler ${key} failed. Reason: ${error.message}`)
             console.error(error)
+            process.exit()
         })
     }
 
