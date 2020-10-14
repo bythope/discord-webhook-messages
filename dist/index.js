@@ -36452,9 +36452,9 @@ function createEmbed({ commits, default_branch, language, login, repos_url}) {
         description += commit.message + '\n'
     }
     embed.setColor(login ? 0xf66a0a : 0x28a745)
-    embed.setTitle(login + ' created pull request')
+    embed.setTitle(login + ' pushed some changes')
     embed.setURL(repos_url)
-    embed.setDescription('Writen in: ' + language)
+    embed.setDescription(description)
     embed.setFooter(`Default branch: ${default_branch}`)
     embed.setTimestamp(new Date(commits[commits.length-1].timestamp))
     return embed
