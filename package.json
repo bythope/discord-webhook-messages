@@ -4,7 +4,7 @@
   "description": "GitHub action for posting messages on discord server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "ncc build index.js --license licenses.txt"
   },
   "repository": {
     "type": "git",
@@ -24,5 +24,8 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "axios": "^0.20.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.24.1"
   }
 }
