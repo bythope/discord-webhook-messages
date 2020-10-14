@@ -8,6 +8,9 @@ inputs:
     webhookUrl:
         description: A full discord webhook url
         required: true
+    handler:
+        description: Event handler
+        required: true
 
 
 output:
