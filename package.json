@@ -6,7 +6,6 @@
   "scripts": {
     "build": "ncc build src/index.js --license licenses.txt",
     "test": "mocha"
-     
   },
   "repository": {
     "type": "git",
@@ -30,6 +29,7 @@
   },
   "devDependencies": {
     "@vercel/ncc": "0.24.1",
+    "chai": "4.2.0",
     "mocha": "8.1.3"
   }
 }
