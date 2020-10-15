@@ -4,7 +4,9 @@
   "description": "GitHub action for posting messages on discord server",
   "main": "index.js",
   "scripts": {
-    "build": "ncc build src/index.js --license licenses.txt"
+    "build": "ncc build src/index.js --license licenses.txt",
+    "test": "mocha"
+     
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,7 @@
     "discord.js": "12.3.1"
   },
   "devDependencies": {
-    "@vercel/ncc": "0.24.1"
+    "@vercel/ncc": "0.24.1",
+    "mocha": "8.1.3"
   }
 }
